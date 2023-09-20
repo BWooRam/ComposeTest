@@ -16,6 +16,7 @@ class GetNewsRss(private val rssService: RssApi) {
                 RssApi.LanguageType.EN -> {
                     rssService.getEnNewsList()
                 }
+
                 RssApi.LanguageType.KR -> {
                     rssService.getKrNewsList()
                 }
