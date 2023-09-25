@@ -11,6 +11,7 @@ import org.junit.Test
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
+        val obj = "12111111111111111 TEST".let(::println)
         assertEquals(4, 2 + 2)
     }
 }

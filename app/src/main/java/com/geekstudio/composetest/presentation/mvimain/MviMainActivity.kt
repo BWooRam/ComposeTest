@@ -12,11 +12,20 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.datastore.preferences.core.edit
 import com.geekstudio.composetest.data.dto.Rss
+import com.geekstudio.composetest.data.dto.SettingsData
+import com.geekstudio.composetest.data.remote.SettingDataStore
+import com.geekstudio.composetest.module.DataStoreModule
 import com.geekstudio.composetest.presentation.base.BaseActivity
 import com.geekstudio.composetest.ui.theme.ComposeTestTheme
 import com.geekstudio.composetest.ui.view.RssList
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -28,6 +37,7 @@ class MviMainActivity : BaseActivity() {
 
         initUiObserver()
         initView(null)
+
     }
 
     override fun onStart() {

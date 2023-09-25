@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'kotlinx-serialization'
+    id "com.google.protobuf"
 }
 
 android {
@@ -91,6 +93,28 @@ dependencies {
 
     def datastore_version = "1.0.0"
     implementation "androidx.datastore:datastore-preferences:$datastore_version"
+    implementation "androidx.datastore:datastore:$datastore_version"
+
+    implementation  "com.google.protobuf:protobuf-javalite:3.10.0"
+
+    def kotlinx_serialization_version = "1.3.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.10.0"
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+            }
+        }
+    }
 }
 
 // Allow references to generated code

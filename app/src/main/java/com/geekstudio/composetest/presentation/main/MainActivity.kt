@@ -19,6 +19,7 @@ import com.geekstudio.composetest.presentation.base.BaseUiState
 import com.geekstudio.composetest.ui.theme.ComposeTestTheme
 import com.geekstudio.composetest.ui.view.RssList
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.FileInputStream
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -55,11 +56,13 @@ class MainActivity : BaseActivity() {
                             }
                         }
                     }
+
                     is BaseUiState.Loading -> {
                         Log.d("initUiObserver", "loading")
                         titleState.value = "Loading Title"
                         valueState.value = "Loading Value"
                     }
+
                     is BaseUiState.Error -> {
                         Log.d("initUiObserver", "Error = ${it.error}")
                         titleState.value = "Error Title"
