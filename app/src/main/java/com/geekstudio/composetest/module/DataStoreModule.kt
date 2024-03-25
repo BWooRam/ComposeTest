@@ -1,24 +1,32 @@
 package com.geekstudio.composetest.module
 
+import android.R.raw
 import android.content.Context
+import android.os.Build
+import android.security.keystore.KeyProperties
+import android.util.Log
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.security.crypto.MasterKeys
 import com.geekstudio.composetest.TestData
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
 import java.io.InputStream
 import java.io.OutputStream
+import java.security.KeyPairGenerator
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.spec.SecretKeySpec
 import javax.inject.Named
 import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)

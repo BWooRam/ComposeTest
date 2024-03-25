@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace 'com.geekstudio.composetest'
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.geekstudio.composetest"
-        minSdk 23
-        targetSdk 32
+        minSdk 24
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -24,10 +24,24 @@ android {
         }
     }
 
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword '123456'
+            storeFile file('C:\\AndroidStudioProjects\\ComposeTest\\app\\test.jks')
+            storePassword '123456'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+
+        debug {
+
         }
     }
     compileOptions {
@@ -99,6 +113,8 @@ dependencies {
 
     def kotlinx_serialization_version = "1.3.0"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
+
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
 }
 
 protobuf {

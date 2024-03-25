@@ -1,6 +1,7 @@
 package com.geekstudio.composetest.ui.view
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -28,6 +29,7 @@ import com.geekstudio.composetest.utils.Util
 fun RssList(context: Context, rss: Rss) {
     val channel = rss.channel
     val padding = PaddingValues(horizontal = DefaultMargin, vertical = 8.dp)
+    Log.d("ListView", "RssList execute")
     LazyColumn(
         contentPadding = padding
     ) {
