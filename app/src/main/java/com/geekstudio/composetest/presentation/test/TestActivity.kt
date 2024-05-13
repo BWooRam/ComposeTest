@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -13,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.geekstudio.composetest.data.dto.Rss
 import com.geekstudio.composetest.presentation.base.BaseActivity
@@ -25,8 +27,7 @@ import kotlin.random.Random
 @AndroidEntryPoint
 class TestActivity : BaseActivity() {
     private val viewModel: TestViewModel by viewModels()
-    private val titleState = mutableStateOf("")
-    private val valueState = mutableStateOf("")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,13 +55,38 @@ class TestActivity : BaseActivity() {
                         }) {
                             Text(text = "refresh")
                         }
+                        Log.d("RssList", "initView start")
                         val ui by viewModel.uiSharedFlow.collectAsState(BaseUiState.Loading)
                         Log.d("RssList", "initView ui = $ui")
-                        if (ui is BaseUiState.Success<*>) {
-                            runCatching {
-                                (ui as BaseUiState.Success<*>).data as Rss
-                            }.onSuccess { rss ->
-                                RssList(this@TestActivity, rss)
+                        when (ui) {
+                            is BaseUiState.Success<*> -> {
+                                runCatching {
+                                    (ui as BaseUiState.Success<*>).data as Rss
+                                }.onSuccess { rss ->
+                                    RssList(this@TestActivity, rss)
+                                }
+                            }
+
+                            is BaseUiState.Loading -> {
+                                Text(
+                                    text = "Loading",
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .align(Alignment.CenterHorizontally)
+                                )
+                            }
+
+                            is BaseUiState.Error -> {
+                                runCatching {
+                                    (ui as BaseUiState.Error).error
+                                }.onSuccess { error ->
+                                    Text(
+                                        text = error?.message ?: "",
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .align(Alignment.CenterHorizontally)
+                                    )
+                                }
                             }
                         }
                     }
@@ -83,8 +109,6 @@ class TestActivity : BaseActivity() {
                         when (it.data) {
                             is Rss -> {
                                 Log.d("RssList", "initUiObserver data = ${it.data}")
-                                titleState.value = "Success Title"
-                                valueState.value = "Success Value"
                             }
 
                             else -> {
@@ -95,14 +119,10 @@ class TestActivity : BaseActivity() {
 
                     is BaseUiState.Loading -> {
                         Log.d("RssList", "initUiObserver loading")
-                        titleState.value = "Loading Title"
-                        valueState.value = "Loading Value"
                     }
 
                     is BaseUiState.Error -> {
                         Log.d("RssList", "initUiObserver Error = ${it.error}")
-                        titleState.value = "Error Title"
-                        valueState.value = "Error Value"
                     }
                 }
             }

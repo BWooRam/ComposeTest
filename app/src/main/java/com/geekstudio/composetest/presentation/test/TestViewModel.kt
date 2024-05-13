@@ -1,6 +1,7 @@
 package com.geekstudio.composetest.presentation.test
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geekstudio.composetest.data.api.RssApi
@@ -30,10 +31,11 @@ class TestViewModel @Inject constructor(
     fun showRandomErrorUi() {
         val randomSeed = Random.nextInt(0, 3)
         val throwable = when (randomSeed) {
-            0 -> Throwable()
-            1 -> NullPointerException()
-            else -> IndexOutOfBoundsException()
+            0 -> Throwable("Throwable Error 발생")
+            1 -> NullPointerException("NullPointerException Error 발생")
+            else -> IndexOutOfBoundsException("IndexOutOfBoundsException Error 발생")
         }
+        Log.d("RssList", "showRandomErrorUi throwable = $throwable")
         _uiSharedFlow.tryEmit(BaseUiState.Error(throwable))
     }
 
