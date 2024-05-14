@@ -25,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class TestActivity : BaseActivity() {
+class TestActivity1 : BaseActivity() {
     private val viewModel: TestViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +63,7 @@ class TestActivity : BaseActivity() {
                                 runCatching {
                                     (ui as BaseUiState.Success<*>).data as Rss
                                 }.onSuccess { rss ->
-                                    RssList(this@TestActivity, rss)
+                                    RssList(this@TestActivity1, rss)
                                 }
                             }
 
