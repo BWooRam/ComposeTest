@@ -1,26 +1,21 @@
 package com.geekstudio.composetest.presentation.test
 
 
-import android.provider.ContactsContract.Data
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.geekstudio.composetest.data.api.RssApi
-import com.geekstudio.composetest.data.dto.Channel
 import com.geekstudio.composetest.data.dto.ContactVal
 import com.geekstudio.composetest.data.dto.ContactVar
-import com.geekstudio.composetest.data.dto.Item
-import com.geekstudio.composetest.data.dto.Rss
+import com.geekstudio.composetest.data.dto.ContactsVal
+import com.geekstudio.composetest.data.dto.ContactsVar
 import com.geekstudio.composetest.data.remote.RssDataSource
 import com.geekstudio.composetest.presentation.base.BaseUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.lang.IndexOutOfBoundsException
-import java.lang.NullPointerException
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -35,16 +30,33 @@ class TestViewModel @Inject constructor(
     )
     val uiSharedFlow = _uiSharedFlow.asSharedFlow()
 
+    private val randomContactVal = getRandomContactVal()
+    private val randomContactVar = getRandomContactVar()
+
     fun showRandomContactValUi() {
-        val temContactVal = getRandomContactVal()
-        Log.d("RssList", "showRandomContactValUi temContactVal = $temContactVal")
-        _uiSharedFlow.tryEmit(BaseUiState.Success(temContactVal))
+        val tempContactVal = mutableListOf<ContactVal>()
+        for (index in 0..10) {
+            if (index == 0) {
+                tempContactVal.add(index, randomContactVal)
+            } else {
+                tempContactVal.add(index, getRandomContactVal())
+            }
+        }
+        Log.d("ContactItemCard", "showRandomContactValUi tempContactVal = $tempContactVal")
+        _uiSharedFlow.tryEmit(BaseUiState.Success(ContactsVal(tempContactVal)))
     }
 
     fun showRandomContactVarUi() {
-        val temContactVar = getRandomContactVar()
-        Log.d("RssList", "showRandomContactVarUi temContactVar = $temContactVar")
-        _uiSharedFlow.tryEmit(BaseUiState.Success(temContactVar))
+        val tempContactVar = mutableListOf<ContactVar>()
+        for (index in 0..10) {
+            if (index == 0) {
+                tempContactVar.add(index, randomContactVar)
+            } else {
+                tempContactVar.add(index, getRandomContactVar())
+            }
+        }
+        Log.d("ContactItemCard", "showRandomContactVarUi tempContactVar = $tempContactVar")
+        _uiSharedFlow.tryEmit(BaseUiState.Success(ContactsVar(tempContactVar)))
     }
 
     private fun getRandomContactVal(): ContactVal {

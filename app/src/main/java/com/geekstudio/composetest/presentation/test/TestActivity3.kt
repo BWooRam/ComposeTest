@@ -6,22 +6,23 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.geekstudio.composetest.data.dto.ContactVal
 import com.geekstudio.composetest.data.dto.ContactVar
+import com.geekstudio.composetest.data.dto.ContactsVal
+import com.geekstudio.composetest.data.dto.ContactsVar
 import com.geekstudio.composetest.data.dto.Rss
 import com.geekstudio.composetest.presentation.base.BaseActivity
 import com.geekstudio.composetest.presentation.base.BaseUiState
 import com.geekstudio.composetest.ui.theme.ComposeTestTheme
-import com.geekstudio.composetest.ui.view.ContactItemCard
+import com.geekstudio.composetest.ui.view.ContactList
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class TestActivity3 : BaseActivity() {
@@ -34,23 +35,12 @@ class TestActivity3 : BaseActivity() {
             ComposeTestTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colors.background
                 ) {
                     Column {
                         Button(onClick = {
-                            val randomSeed = Random.nextInt(0, 2)
-                            Log.d("ContactItemCard", "initView randomSeed = $randomSeed")
-                            when (randomSeed) {
-                                0 -> {
-                                    Log.d("ContactItemCard", "initView showRandomContactValUi")
-                                    viewModel.showRandomContactValUi()
-                                }
-
-                                1 -> {
-                                    Log.d("ContactItemCard", "initView showRandomContactVarUi")
-                                    viewModel.showRandomContactVarUi()
-                                }
-                            }
+                            viewModel.showRandomContactVarUi()
+//                            viewModel.showRandomContactValUi()
                         }) {
                             Text(text = "refresh")
                         }
@@ -62,8 +52,8 @@ class TestActivity3 : BaseActivity() {
                                 (ui as BaseUiState.Success<*>).data
                             }.onSuccess { data ->
                                 when (data) {
-                                    is ContactVar -> ContactItemCard(data)
-                                    is ContactVal -> ContactItemCard(data)
+                                    is ContactsVar -> ContactList(data)
+                                    is ContactsVal -> ContactList(data)
                                 }
                             }
                         }
@@ -72,12 +62,6 @@ class TestActivity3 : BaseActivity() {
             }
             initUiObserver()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.showRandomContactValUi()
-//        viewModel.showRandomContactVarUi()
     }
 
     private fun initUiObserver() {
